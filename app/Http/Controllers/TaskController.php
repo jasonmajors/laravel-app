@@ -13,4 +13,5 @@ class TaskController extends Controller
     {
     	$this->middleware('auth');
     }
+
 }
