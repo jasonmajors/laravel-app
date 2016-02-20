@@ -2,16 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Task;
+use App\Repositories\TaskRepository;
 use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+
 class TaskController extends Controller
 {
-    public function __construct()
+    /**
+    * The task repository instance.
+    *
+    * @var TaskRepository
+    */
+    protected $tasks;
+
+    /**
+    * Create a new controller instance.
+    *
+    * @param TaskRepository $tasks
+    * @return void
+    */
+    public function __construct(TaskRepository $tasks)
     {
+        // Require authentication to use this controllerbnzx
     	$this->middleware('auth');
+        $this->tasks = $tasks;
     }
     
     /**
@@ -22,7 +39,9 @@ class TaskController extends Controller
     */
     public function index(Request $request)
     {
-    	return view('tasks.index');
+    	return view('tasks.index', [
+            'tasks' => $this->tasks->forUser($request->user()),
+        ]);
     }
 
     /**
